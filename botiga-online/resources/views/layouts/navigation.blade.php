@@ -8,6 +8,22 @@
                 <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
                     {{ __('Productes') }}
                 </x-nav-link>
+                
+                @auth
+                    @if (auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                            Usuaris
+                        </x-nav-link>
+                    @endif
+                @endauth
+
+                @auth
+                    @if(auth()->user()->role === 'client')
+                        <a href="{{ route('cart.index') }}" class="inline-flex items-center px-2 py-1 text-sm font-medium text-gray-700 hover:text-gray-900">
+                            🛒 Carret
+                        </a>
+                    @endif
+                @endauth
 
             </div>
 
