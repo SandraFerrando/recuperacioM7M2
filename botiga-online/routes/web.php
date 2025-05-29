@@ -7,8 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('products', ProductController::class);
-    Route::resource('users', UserController::class)->except(['create', 'store']); // Només mostrar, editar i actualitzar
+    Route::resource('users', UserController::class)->except(['show']);
 });
 
 Route::get('/', function () {
