@@ -7,10 +7,16 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 
-Route::get('cart/checkout', [CartController::class, 'checkout'])->middleware(['auth'])->name('cart.checkout');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+});
+
+Route::get('cart/checkout', [CartController::class, 'checkout'])->middleware(['auth', 'verified'])->name('cart.checkout');
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware(['auth']);
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware(['auth']);
+Route::post('/orders', [OrderController::class, 'store'])->middleware(['auth', 'verified'])->name('orders.store');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
@@ -44,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware(['auth', 'verified']);
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
