@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+
+Route::get('cart/checkout', [CartController::class, 'checkout'])->middleware(['auth'])->name('cart.checkout');
+
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index')->middleware(['auth']);
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware(['auth']);
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
@@ -35,4 +41,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/update/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 });

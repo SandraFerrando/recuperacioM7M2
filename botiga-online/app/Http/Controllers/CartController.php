@@ -40,12 +40,27 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Quantitat actualitzada correctament.');
     }
 
-
     public function remove(CartItem $cartItem)
     {
-        $this->authorize('delete', $cartItem); // opcional
         $cartItem->delete();
 
         return redirect()->route('cart.index')->with('success', 'Producte eliminat!');
+    }
+
+    public function checkout()
+    {
+        $cartItems = Auth::user()->cartItems()->with('product')->get();
+
+        $cart = $cartItems->map(function ($item) {
+            return [
+                'name' => $item->product->name,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+            ];
+        });
+
+        $total = $cart->sum(fn($item) => $item['price'] * $item['quantity']);
+
+        return view('cart.checkout', compact('cart', 'total'));
     }
 }

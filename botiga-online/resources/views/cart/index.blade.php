@@ -3,6 +3,7 @@
 @section('content')
 <div class="container">
     <h1 class="mb-4">El teu carret de compra</h1>
+    @php $total = 0; @endphp
 
     @if($cartItems->isEmpty())
         <p>No tens cap producte al carret.</p>
@@ -47,6 +48,12 @@
         <div class="text-end">
             <h4>Total: {{ number_format($total, 2) }} €</h4>
             <a href="#" class="btn btn-success mt-2">Finalitzar la compra</a> {{-- Aquesta acció es pot implementar després --}}
+        </div>
+        <div class="text-end">
+            <h4>Total: {{ number_format($total, 2) }} €</h4>
+            <a href="{{ route('cart.checkout') }}" class="btn btn-success mt-2">
+                🛒 Finalitzar la compra
+            </a>
         </div>
     @endif
 </div>
