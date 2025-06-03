@@ -18,13 +18,10 @@
                 @endauth
 
                 @auth
-                    <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
-                        Comandes
-                    </x-nav-link>
-                @endauth
-
-                @auth
                     @if(auth()->user()->role === 'client')
+                        <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
+                            Comandes
+                        </x-nav-link>
                         <a href="{{ route('cart.index') }}" class="inline-flex items-center px-2 py-1 text-sm font-medium text-gray-700 hover:text-gray-900">
                             🛒 Carret
                         </a>
@@ -49,10 +46,6 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
